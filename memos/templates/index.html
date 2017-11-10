@@ -48,6 +48,16 @@
   <div class="col-md-10">
     {{ memo.text }}
   </div>
+  <div class="col-md-1">
+    <form method="POST"  action="/delete">
+
+    
+    <button type="button", value={{memo.text}}, id="delete", name="delete"> delete??</button>
+  </form>
+    
+  </div>
+  
+
   </div> <!-- row -->
   </div> <!-- memo -->
   {% endfor %}

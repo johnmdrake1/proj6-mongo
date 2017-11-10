@@ -68,3 +68,11 @@ it's only the initial setup where you have to be
 careful to use the right version-specific commands. 
 
 
+Project: Project 6, MongoDB Memos
+Author: John Drake
+profile:https://github.com/johnmdrake1
+repo:https://github.com/johnmdrake1/proj6-mongo
+
+Description:
+An index page with all of the values in a MongoDB database(in this case a remote database using Mlab).u 
+The user, who must be added as a user of this Mlab database 

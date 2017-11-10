@@ -81,7 +81,7 @@ def index():
   return flask.render_template('index.html')
 
 
-# We don't have an interface for creating memos yet
+# Renders the create page
 
 @app.route("/create")
 def create():
@@ -89,6 +89,7 @@ def create():
   app.logger.debug("go to form")
   return flask.render_template('create.html')
 
+# Allows creation and transmission of new db entry
 @app.route("/_create", methods=['POST'])
 def createsend():
   text = request.form['text']
@@ -104,6 +105,25 @@ def createsend():
   collection.insert(record)
 
   return flask.redirect(url_for("index"))
+
+
+#Deletes an entry, work in progress
+@app.route("/delete", methods=['POST'])
+def delete():
+  delete = flask.request.form['delete']
+  print(text)
+  collection.remove({'text':text})
+  # for record in collection.find( { "type": "dated_memo" } ):
+  #   #id = record['_id']
+  #   #print(id)
+
+  #   collection.remove()
+
+
+
+  return index()
+
+
 
 
 
@@ -139,6 +159,16 @@ def humanize_arrow_date( date ):
             human = then.humanize(now)
             if human == "in a day":
                 human = "Tomorrow"
+            #Added some additional situations that warrant changes in wording for humanized version
+            if human == "a day ago":
+                human = "Yesterday"
+            if "ago" in human:
+              if "hours" in human:
+                human = "Yesterday"
+            if "in" in human:
+              if "hours" in human:
+                human = "Tomorrow"
+
     except: 
         human = date
     return human
@@ -154,12 +184,28 @@ def get_memos():
     Returns all memos in the database, in a form that
     can be inserted directly in the 'session' object.
     """
-    records = [ ]
+    # Will represent unprocessed list of memos
+    unp = [ ]
     for record in collection.find( { "type": "dated_memo" } ):
         record['date'] = arrow.get(record['date']).isoformat()
+        
+
         del record['_id']
-        records.append(record)
-    return records 
+        unp.append(record)
+    
+    #Sort for memos
+    for d in range(len(unp)-1):
+      for t in range(d+1, len(unp)):
+        curdated = unp[d]['date']
+        curdatet = unp[t]['date']
+        if curdatet < curdated:
+          unp[d]['date'] = unp[t]['date']
+          unp[t]['date'] = curdated
+    records = unp
+
+
+
+    return records
 
 
 if __name__ == "__main__":

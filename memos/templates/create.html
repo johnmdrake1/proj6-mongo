@@ -8,9 +8,7 @@
   	<!-- <form role="form"> -->
 
   
-    <label>Begins at</label>
-    <input type=date name="begin_date" id="begin_date" value="2017-01-01" />
-    <input type=time name="begin_time" id="begin_time" value="00:00"    />
+    
 
 
    <!--  Name: <input type="text" id="myText" value="Mickey">
@@ -20,20 +18,22 @@
 	<!-- <button onclick="dealer()">Send to DB</button> -->
 
 	<!-- </form> -->
-	<form method="POST">
+	<form method="POST"  action="/_create">
+		<input type=date name="date" id="date" value="2017-01-01" />
+    	<input type=time name="begin_time" id="begin_time" value="00:00"    />
         <input type="text" name="text">
         <input type="submit" name="create" value="Send">
     </form>
-    <!-- <button onclick="ontest()">test?</button>
-    request.args.get(isit) -->
+    <button onclick="ontest()">test?</button>
+    <!-- request.args.get(isit) -->
   
 
   <script>
 
-  	// function memoizer(){
-  	// 	var textwork = document.getElementById('text').value;
-  	// 	console.log(textwork);
-  	// }
+  	function memoizer(){
+  		var textwork = document.getElementById('text').value;
+  	 	console.log(textwork);
+  	 }
   	// function ontest(){
   	// 	var isit = request.args.get("text");
   	// 	console.log(isit);
@@ -46,9 +46,9 @@
   	
 
   	
-<!--   	// var deresult = dealer();
-  	// console.log(deresult);
-  //var SCRIPT_ROOT = {{ request.script_root|tojson|safe }} ;
+// <!--   	// var deresult = dealer();
+//   	// console.log(deresult);
+//   //var SCRIPT_ROOT = {{ request.script_root|tojson|safe }} ;
   //var TIME_CALC_URL = SCRIPT_ROOT + "/_calc_times";
 
   // Pass calctimes a <td> element containing the data for a control.

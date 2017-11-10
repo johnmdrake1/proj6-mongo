@@ -107,17 +107,15 @@ def createsend():
   return flask.redirect(url_for("index"))
 
 
-#Deletes an entry, work in progress
-@app.route("/delete", methods=['POST'])
+#Deletes an entry, works now
+@app.route("/delete", methods=["POST"])
 def delete():
+  print("Entering delete")
   delete = flask.request.form['delete']
-  print(text)
-  collection.remove({'text':text})
-  # for record in collection.find( { "type": "dated_memo" } ):
-  #   #id = record['_id']
-  #   #print(id)
+  print(delete)
+  #removes an entry based on its text field matching the one the submit button was clicked for in index.html
+  collection.remove({"text": delete})
 
-  #   collection.remove()
 
 
 
@@ -199,8 +197,9 @@ def get_memos():
         curdated = unp[d]['date']
         curdatet = unp[t]['date']
         if curdatet < curdated:
-          unp[d]['date'] = unp[t]['date']
-          unp[t]['date'] = curdated
+          old = unp[d]
+          unp[d] = unp[t]
+          unp[t] = old
     records = unp
 
 

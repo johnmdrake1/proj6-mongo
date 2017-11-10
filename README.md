@@ -1,78 +1,70 @@
-# proj6-mongo
-Simple list of dated memos kept in MongoDB database
 
-## What is here
-
-A simple Flask app that displays all the dated memos it finds in a MongoDB database.
-There is also a 'scaffolding' program, db_trial.py, for inserting a couple records into the database 
-and printing them out.  Get db_trial.py working before you try making
-your flask app work.  
-
-## What is not here
-
-In addition to the missing functionality in the application, you will
-need a MongoDB database, and you will need credentials (user name and
-password) both for an administrative user and a regular user.  The
-administrative user may be you, but the regular user is your
-application.    Your credentials.ini file should include
-
-- DB : The name of your MongoDB database, which may include multiple collections
-- DB_USER : A use name for your application.  
-- DB_USER_PW : The password your application gives to access your database
-- ADMIN_USER : The administrative user for your MongoDB
-installation.  If you install MongoDB on your own computer, you need
-this for creating a database.  You don't need it if you use a
-cloud-hosted MongoDB service. 
-- ADMIN_PW : Password for the administrative user.  You need this if
-you use create_db.py to initialize your database.  You don't need it
-if you use a cloud-hosted MongoDB service
-- DB_HOST : The host computer on which your MongoDB database runs.  This
-might be 'localhost' or it might be something like ds884198.mlab.com
-- DB_PORT : The network port on which your MongoDB database listens.
-  If you run MongoDB on your own computer, the default is 27017.  If
-  you run MongoDB on MLab or a similar cloud service, it will be a port
-  assigned by your cloud service. 
-
-## Functionality you'll add
-
-The user should be able to add dated memos, either from the same index page or from a separate page. 
-Memos should be displayed in date order. 
-The user should be able to delete memos. 
-
-## Setting up
-
-Our use of the database is pretty simple, but you should anticipate
-that installing MongoDB could take some time.  Since you may not be
-able to install the same version of MongoDB on your development
-computer and your Pi, it will be especially important to test your
-project on the Pi.
-
-Using MongoDB on a cloud service like MLab is much easier than
-installing it on your own computer.  I strongly suggest you do that
-first.  After your project is working satisfactorily, you may want to
-install MongoDB on your own computer and adjust your credentials.ini
-file to use it. 
-
-The version of MongoDB available for installing on Raspberry Pi with
-apt-get is 2.4.  The version you can find for your development
-computer is probably 3.x.  You may even have difficulty finding
-documentation for 2.4, as it is considered obsolete.  However,
-commands that work for 2.4 still seem to work for 3.x, so you should
-write your application and support scripts to use 2.4.   The
-difference that may cause you the most headaches is in creating
-database user accounts (which are different than the Unix accounts for
-users). 
-
-In Python, the pymongo API works with both versions of MongoDB, so
-it's only the initial setup where you have to be  
-careful to use the right version-specific commands. 
 
 
 Project: Project 6, MongoDB Memos
-Author: John Drake
+Author: John Drake, Michal Young
 profile:https://github.com/johnmdrake1
 repo:https://github.com/johnmdrake1/proj6-mongo
 
+NOTES ON LATENESS: At the time of my intermediate commit right before the project's three day late period
+was to end(8:00PM on Thursday) there were a few glaring issues in addition to the project not being completely finished.
+These included:
+-Dates sorting properly but the memos being mismatched
+-Delete functionality not working
+
+Even though the late period allegedly ended at 8, I have made some changes to add to the project's completeness. These can be seen
+from my commit history, but I will list them here for ease of reviewing. I will edit the README to add to this list should I make 
+any further improvements.
+-Fixed delete functionality
+-Fixed sorting, values now display with their correct dates and are more properly aligned
+-Added this README(was default before)
+
+
+
+
 Description:
-An index page with all of the values in a MongoDB database(in this case a remote database using Mlab).u 
-The user, who must be added as a user of this Mlab database 
+An index page and server with all of the values in a MongoDB database collection(in this case a remote database using Mlab).
+This collection will consist of text-string memos and a date associated with each, set by the user when the memo is created.
+The user, who must be added as a user of this Mlab database in credentials.ini, can then run the server and see which values
+are already present in the current collection. By clicking the relevant buttons on the page, the user can add new memos
+or delete old ones. Memos are sorted by the date attached to them when they were created.
+
+Instructions-
+
+For end users:
+
+Assuming credentials.ini has been set up with the user account and the server started, localhost:5000 will take the user to 
+the main page. From there, the "Click for memo submission form" box will redirect to a creation page. Choose a date(be wary of
+which value is month and which is day, as this varies by system/browser) and enter the desired memo string. The send button will
+then add this to the database. After memo creation, client should redirect to the main index page and any changes should be 
+reflected here. Clicking the "delete" button below any of the new entries should remove it from the database.
+
+For Developers:
+Move credentials.ini into root directory/memos folder. The only fields which will likely need to be changed are
+DB_USER : A user name for the application/database.  
+DB_USER_PW : The associated password
+
+In terminal:
+1. cd to project directory
+2. make install (installs necessary dependencies in requirements.txt into virtual environment)
+3. make run(not make start) will initialize the server
+4. localhost:5000 as above
+5. ctrl+c in terminal to quit current server process
+
+Brief summary of how everything works:
+
+index.html is the page initially displayed. It is set up to display all "memos" currently in the mongodb database
+collection. It does this through flask communication with flask_main.py. index.html also contains a button that links to create.html(the html
+page displayed and used when a memo is being created).
+
+create.html has a date field and text entry box. These are the necessary tools for building a memo entry for the mongodb collection.
+Once both fields are satisfied, the data is sent through flask to flask_main.py where it is subsequently processed and 
+added to the database.
+
+flask_main.py is responsible for connecting to the mlab database and tying everything together, and does the processing for the html files and their inputs and 
+outputs. The file retrieves current data stored in the mlab mongodb database collection and communicates it with index.html to 
+display using flask, arrow(responsible for the casual, human readable representation of dates of posting), and other resources.  
+flask_main also handles transmission of create.html values to mlab, and memo removal functions should the relevant buttons be clicked. 
+The memos are also collected and sorted by date in this file, and some arrow humanize exceptions are handled.
+
+ 
